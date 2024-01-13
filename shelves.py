@@ -1,7 +1,15 @@
 #shelves on which to store books
 
-from typing import Any
-
+# from typing import Any
+from tkinter import Entry, Canvas, Checkbutton, Radiobutton, Frame, RADIOBUTTON, Grab, Grid, PanedWindow, tkinter as tk
+#May use the following:
+#https://tcl.tk/man/tcl8.6/TkCmd/ttk_entry.htm#M56
+#https://tcl.tk/man/tcl8.6/TkCmd/ttk_checkbutton.htm
+#https://tcl.tk/man/tcl8.6/TkCmd/ttk_radiobutton.htm
+#https://tcl.tk/man/tcl8.6/TkCmd/ttk_frame.htm
+#https://tcl.tk/man/tcl8.6/TkCmd/grab.htm#M12
+#https://tcl.tk/man/tcl8.6/TkCmd/grid.htm
+#https://tcl.tk/man/tcl8.6/TkCmd/ttk_panedwindow.htm
 
 class to_read:
     def __init__(self, to_read_books):
