@@ -52,9 +52,29 @@ listboxes = [tk.Listbox(root) for _ in range(3)]
 
 title = Label(text="Past reading, Current reading, & Future reading below, respectively")
 title.pack(side=TOP)
+
+
+def add_item():
+    item = entry.get()
+    if item != '':
+        listbox.insert(tk.END, item)
+        entry.delete(0, tk.END)  # Clear the entry field
+
+# root = tk.Tk()
+
+entry = tk.Entry(root)
+entry.pack()
+
+add_button = tk.Button(root, text="Add Item", command=add_item)
+# remove_button = tk.Button(root, text="Drop Item", command=)
+add_button.pack()
+
+listbox = tk.Listbox(root)
+listbox.pack()
 for i, listbox in enumerate(listboxes):
     listbox.insert('end', f'Item in list {i+1}')
     listbox.pack(side='left')
+
 
 def move_item(e, src, dest):
     try:
@@ -70,5 +90,7 @@ buttons = [tk.Button(root, text=f'Move {i}->{(i+1)%3}',
             for i in range(3)]
 for button in buttons:
     button.pack()
+
+
     
 root.mainloop()
