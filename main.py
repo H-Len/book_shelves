@@ -26,6 +26,7 @@ def move_item(e, src, dest):
 buttons = [tk.Button(root, text=f'Move {i}->{(i+1)%3}', 
                      command=lambda src=listboxes[i], dest=listboxes[(i+1)%3]: move_item(root, src, dest)) 
             for i in range(3)]
+
 for button in buttons:
     button.pack()
 
@@ -35,13 +36,20 @@ def add_item():
         listbox.insert(tk.END, item)
         entry.delete(0, tk.END)  # Clear the entry field
 
-# root = tk.Tk()
+def edit_current():
+   for item in listbox.curselection():
+      listbox.delete(item)
+      listbox.insert("active", "empty")
+
 
 entry = tk.Entry(root)
 entry.pack()
 
 add_button = tk.Button(root, text="Add Item", command=add_item)
-# remove_button = tk.Button(root, text="Drop Item", command=)
 add_button.pack()
+
+
+remove_button = tk.Button(root, text="Drop", command=edit_current)
+remove_button.pack()
     
 root.mainloop()
