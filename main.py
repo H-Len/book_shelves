@@ -36,10 +36,9 @@ def add_item():
         listbox.insert(tk.END, item)
         entry.delete(0, tk.END)  # Clear the entry field
 
-def edit_current():
+def del_current():
    for item in listbox.curselection():
       listbox.delete(item)
-      listbox.insert("active", "empty")
 
 
 entry = tk.Entry(root)
@@ -49,7 +48,7 @@ add_button = tk.Button(root, text="Add Item", command=add_item)
 add_button.pack()
 
 
-remove_button = tk.Button(root, text="Drop", command=edit_current)
+remove_button = tk.Button(root, text="Drop", command=del_current)
 remove_button.pack()
     
 root.mainloop()
