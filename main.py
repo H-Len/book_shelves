@@ -4,23 +4,29 @@ from tkinter import *
 
 root = tk.Tk()
 root.title("bookshelves")
-
+root.configure(background='slategray')
 # Create a frame
 frame = tk.Frame(root)
 frame.pack()
-title = Label(text="(1) Past reading, (2) Current reading, (3) Future reading")
+title = Label(text="(Box 1) Past reading, (Box 2) Current reading, (Box 3) Future reading")
 title.pack(side=TOP)
+title.configure(background='lightgrey')
+
+
 # title1 = Label(root, text="Past reading")
 # title2 = Label(text="Current reading")
-# title3 = Label(text="Future reading")
+# title2.place(bordermode='outside')
+tk_title = Label(text="Books in my bookshelf: ")
+tk_title.place(bordermode='outside')
+tk_title.configure(background="brown")
 # title3.pack(side='top')
 # title2.pack(side='top', before=title3)
-# title.pack(side='top', before=title2)
+# title1.pack(side='top', before=title2)
 
 
 listboxes = [tk.Listbox(frame) for _ in range(3)]
 # listbox = tk.Listbox(frame)
-l_colors = ["lightblue", "lightgreen", "pink"]
+l_colors = ["lightblue", "lightgreen", "purple"]
 shelf_label = ["Past read", "Currently reading", "Future read"]
 
 
@@ -30,7 +36,6 @@ for i, listbox in enumerate(listboxes):
     listbox.insert('end', f'{shelf_label[i]}')
     listbox.pack(side='left')
     listbox.configure(background = l_colors[i])
-
 
 
 #//////////////////////////////////
@@ -54,7 +59,7 @@ for i in range(3):
     # Move item to the left
     button_left = tk.Button(root, text=f'Move {i}->{(i-1)%3}',
                             command=lambda src=listboxes[i], dest=listboxes[(i-1)%3]: move_item(src, dest))
-    button_left.pack(side="right")
+    button_left.pack(side="left")
 
 
 def add_item():
@@ -82,6 +87,7 @@ border_color = Frame(root, background="red")
  
 # Label Widget inside the Frame
 label = Label(border_color, text="Move book to right most box and select it before clicking delete", bd=5)
+label.configure(background="pink")
  
 # Place the widgets with border Frame
 label.pack(padx=1, pady=1)
