@@ -8,7 +8,7 @@ root.title("bookshelves")
 # Create a frame
 frame = tk.Frame(root)
 frame.pack()
-title = Label(text="Past reading, Current reading, & Future reading")
+title = Label(text="(1) Past reading, (2) Current reading, (3) Future reading")
 title.pack(side=TOP)
 # title1 = Label(root, text="Past reading")
 # title2 = Label(text="Current reading")
