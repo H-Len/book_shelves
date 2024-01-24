@@ -22,14 +22,17 @@ listboxes = [tk.Listbox(frame) for _ in range(3)]
 # listbox = tk.Listbox(frame)
 l_colors = ["lightblue", "lightgreen", "purple"]
 shelf_label = ["Past read", "Currently reading", "Future read"]
+curlistbox = listboxes[2]
 
-
-
+def sel_listbox(event):
+    global curlistbox
+    curlistbox = event.widget
 
 for i, listbox in enumerate(listboxes):
     listbox.insert('end', f'{shelf_label[i]}')
     listbox.pack(side='left')
     listbox.configure(background = l_colors[i])
+    listbox.bind("<FocusIn>", sel_listbox)
 
 
 def switch_buttons(src):
@@ -39,52 +42,57 @@ def switch_buttons(src):
         if item:
             print(item)
     
-
-#//////////////////////////////////
 # used to move items (many buttons)
 def move_item(src, dest):
     try:
         # 'active' is the line which has been selected
         item = src.get('active') 
-        src.delete('active')
-        dest.insert('end', item)
+        if item:
+            src.delete('active')
+            dest.insert('end', item)
     except tk.TclError:
         pass
 
-#bottons to move items left or right
-for i in range(3):
-    # switch_buttons(src)
+def move_left():
+    src = curlistbox
+    i = listboxes.index(src)
+    dest = listboxes[(i-1)%3]
+    move_item(src, dest)
 
-    
-    # Move item to the right
-    button_right = tk.Button(root, text=f'Move {i}->{(i+1)%3}',
-                             command=lambda src=listboxes[i], dest=listboxes[(i+1)%3]: move_item(src, dest))
-    button_right.pack(side="left")
-    
+def move_right():
+    src = curlistbox
+    i = listboxes.index(src)
+    dest = listboxes[(i+1)%3]
+    move_item(src, dest)
 
-    # Move item to the left
-    button_left = tk.Button(root, text=f'Move {i}->{(i-1)%3}',
-                            command=lambda src=listboxes[i], dest=listboxes[(i-1)%3]: move_item(src, dest))
-    button_left.pack(side="left",)
 
+# Move item to the right
+button_right = tk.Button(root, text=f'Move >',
+                            command=move_right)
+button_right.pack(side="left")
+
+
+# Move item to the left
+button_left = tk.Button(root, text=f'Move <',
+                        command=move_left)
+button_left.pack(side="left",)
 
 
 
 def add_item():
     item = entry.get()
-    placement = listbox.curselection()
+    placement = curlistbox.curselection()
+    if not placement:
+        placement = 'end'
     if item != '':
-        listbox.insert(placement, item)
+        curlistbox.insert(placement, item)
         entry.delete(0, tk.END)  # Clear the entry field
 
 
 
 def del_current():
-    for item in listbox.curselection():
-        listbox.delete(item)
-
-    to_go = Label(item)
-    to_go.configure(after=remove_button)
+    for item in curlistbox.curselection():
+        curlistbox.delete(item)
 
 
 add_button = tk.Button(root, text="Add Item", command=add_item)
