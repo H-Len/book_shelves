@@ -12,16 +12,10 @@ title = Label(text="(Box 1) Past reading, (Box 2) Current reading, (Box 3) Futur
 title.pack(side=TOP)
 title.configure(background='lightgrey')
 
-
-# title1 = Label(root, text="Past reading")
-# title2 = Label(text="Current reading")
-# title2.place(bordermode='outside')
+#label to state what is presented in the app
 tk_title = Label(text="Books in my bookshelf: ")
 tk_title.place(bordermode='outside')
 tk_title.configure(background="brown")
-# title3.pack(side='top')
-# title2.pack(side='top', before=title3)
-# title1.pack(side='top', before=title2)
 
 
 listboxes = [tk.Listbox(frame) for _ in range(3)]
@@ -38,6 +32,14 @@ for i, listbox in enumerate(listboxes):
     listbox.configure(background = l_colors[i])
 
 
+def switch_buttons(src):
+    item = src.get('active')
+    print(item)
+    for item in listbox:
+        if item:
+            print(item)
+    
+
 #//////////////////////////////////
 # used to move items (many buttons)
 def move_item(src, dest):
@@ -51,43 +53,59 @@ def move_item(src, dest):
 
 #bottons to move items left or right
 for i in range(3):
+    # switch_buttons(src)
+
+    
     # Move item to the right
     button_right = tk.Button(root, text=f'Move {i}->{(i+1)%3}',
                              command=lambda src=listboxes[i], dest=listboxes[(i+1)%3]: move_item(src, dest))
     button_right.pack(side="left")
+    
 
     # Move item to the left
     button_left = tk.Button(root, text=f'Move {i}->{(i-1)%3}',
                             command=lambda src=listboxes[i], dest=listboxes[(i-1)%3]: move_item(src, dest))
-    button_left.pack(side="left")
+    button_left.pack(side="left",)
+
+
 
 
 def add_item():
     item = entry.get()
+    placement = listbox.curselection()
     if item != '':
-        listbox.insert(tk.END, item)
+        listbox.insert(placement, item)
         entry.delete(0, tk.END)  # Clear the entry field
+
+
 
 def del_current():
     for item in listbox.curselection():
         listbox.delete(item)
 
+    to_go = Label(item)
+    to_go.configure(after=remove_button)
 
-entry = tk.Entry(root)
-entry.pack()
 
 add_button = tk.Button(root, text="Add Item", command=add_item)
-add_button.pack()
+add_button.pack(side='bottom')
 
+
+entry = tk.Entry(root)
+entry.pack(side='bottom', after=add_button)
+
+for i in listboxes:
+    if i['state'] == ACTIVE:
+        print(i)
 remove_button = tk.Button(root, text="Delete", command=del_current)
-remove_button.pack()
+remove_button.pack(side='bottom', before=add_button)
 
 # Create a Frame for border
 border_color = Frame(root, background="red")
  
 # Label Widget inside the Frame
 label = Label(border_color, text="Move book to right most box and select it before clicking delete", bd=5)
-label.configure(background="pink")
+label.configure(background="pink") 
  
 # Place the widgets with border Frame
 label.pack(padx=1, pady=1)
