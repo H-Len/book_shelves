@@ -1,8 +1,8 @@
 import tkinter as tk
 from tkinter import *
-# import display
 
 root = tk.Tk()
+root.geometry("700x600")
 root.title("bookshelves")
 root.configure(background='slategray')
 # Create a frame
@@ -12,17 +12,61 @@ title = Label(text="(Box 1) Past reading, (Box 2) Current reading, (Box 3) Futur
 title.pack(side=TOP)
 title.configure(background='lightgrey')
 
-#label to state what is presented in the app
-tk_title = Label(text="Books in my bookshelf: ")
-tk_title.place(bordermode='outside')
-tk_title.configure(background="brown")
+#opens previously saved copy of saved text into each book box 
+def open_text():
+   text_file = open("book_list.txt", "r")
+   content = text_file.read()
+   for listbox in listboxes:
+       listbox.insert(END, content)
+   text_file.close()
 
+# saves text entered in box
+def save_text():
+   text_file = open("book_list.txt", "w")
+   text_file.write(my_text_box.get(1.0, END))
+   text_file.close()
+
+######################
+#TO DO NEXT:
+def load_list(listbox, books_list):
+    #func will load 1 list of books into 1 listbox
+    pass
+
+def load_dict(listboxes, books_dict):
+    #go thru 3 list boxes and load corresponding list into each box
+    pass
+
+
+
+def load_dict_from_file(file_name):
+    books_dict_sample = {"1": ["once", "twice", "never", "ago"], "2": ["Good morning"], "3": ["a", "b", "c", "d"]}
+    return books_dict_sample
+
+
+###################
+
+# # Creating a text box widget
+my_text_box = Text(root, height=10, width=40)
+my_text_box.pack()
+
+open_btn = Button(root, text="Open Text File", command=open_text)
+open_btn.pack()
+
+# Create a button to save the text
+save = Button(root, text="Save File", command=save_text)
+save.pack()
+
+# #label to state what is presented in the app
+# tk_title = Label(text="Books in my bookshelf: ")
+# tk_title.place(bordermode='outside')
+# tk_title.configure(background="brown")
 
 listboxes = [tk.Listbox(frame) for _ in range(3)]
 # listbox = tk.Listbox(frame)
-l_colors = ["lightblue", "lightgreen", "purple"]
+l_colors = ["lightblue"]
 shelf_label = ["Past read", "Currently reading", "Future read"]
 curlistbox = listboxes[2]
+
 
 def sel_listbox(event):
     global curlistbox
@@ -31,16 +75,11 @@ def sel_listbox(event):
 for i, listbox in enumerate(listboxes):
     listbox.insert('end', f'{shelf_label[i]}')
     listbox.pack(side='left')
-    listbox.configure(background = l_colors[i])
+    listbox.configure(background = l_colors)
     listbox.bind("<FocusIn>", sel_listbox)
 
-
-def switch_buttons(src):
-    item = src.get('active')
-    print(item)
-    for item in listbox:
-        if item:
-            print(item)
+books_dict = load_dict_from_file('test.txt')
+load_dict(listboxes, books_dict)
     
 # used to move items (many buttons)
 def move_item(src, dest):
@@ -107,18 +146,5 @@ for i in listboxes:
         print(i)
 remove_button = tk.Button(root, text="Delete", command=del_current)
 remove_button.pack(side='bottom', before=add_button)
-
-# Create a Frame for border
-border_color = Frame(root, background="red")
- 
-# Label Widget inside the Frame
-label = Label(border_color, text="Move book to right most box and select it before clicking delete", bd=5)
-label.configure(background="pink") 
- 
-# Place the widgets with border Frame
-label.pack(padx=1, pady=1)
-border_color.pack(padx=40, pady=40)
-
-label.pack(side= "bottom")
 
 root.mainloop()
