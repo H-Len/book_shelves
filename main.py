@@ -30,12 +30,13 @@ def save_text():
 #TO DO NEXT:
 def load_list(listbox, books_list):
     #func will load 1 list of books into 1 listbox
-    pass
+    for book in books_list:
+        listbox.insert('end', book)
 
 def load_dict(listboxes, books_dict):
-    #go thru 3 list boxes and load corresponding list into each box
-    pass
-
+    for i in range(3):
+        print(listboxes[i])
+        load_list(listboxes[i], books_dict[str(i+1)])
 
 
 def load_dict_from_file(file_name):
