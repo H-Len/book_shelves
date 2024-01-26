@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import *
+import json
 
 root = tk.Tk()
 root.geometry("700x600")
@@ -14,20 +15,33 @@ title.configure(background='lightgrey')
 
 #opens previously saved copy of saved text into each book box 
 def open_text():
-   text_file = open("book_list.txt", "r")
-   content = text_file.read()
-   for listbox in listboxes:
-       listbox.insert(END, content)
-   text_file.close()
+    filename = "book_list.txt"
+    books_dict = load_dict_from_file(filename)
+    load_dict(listboxes, books_dict)
+    # text_file = open(filename, "r")
+    # content = text_file.read()
+    # for i in range(3):
+        # load_list(listboxes[i], books_dict[str(i+1)])
+    # text_file.close()
+    
+
+# Function for printing the
+# selected listbox value(s)
+def selected_item():
+    for listbox in listboxes:
+        # Traverse the tuple returned by
+        # curselection method and print
+        # corresponding value(s) in the listbox
+        for i in listbox.curselection():
+            print(listbox.get(i))
 
 # saves text entered in box
 def save_text():
-   text_file = open("book_list.txt", "w")
-   text_file.write(my_text_box.get(1.0, END))
+   text_file = open("test.txt", "w")
+#    text_file.write(listboxes.get(1.0, END))
    text_file.close()
 
-######################
-#TO DO NEXT:
+
 def load_list(listbox, books_list):
     #func will load 1 list of books into 1 listbox
     for book in books_list:
@@ -35,20 +49,15 @@ def load_list(listbox, books_list):
 
 def load_dict(listboxes, books_dict):
     for i in range(3):
-        print(listboxes[i])
         load_list(listboxes[i], books_dict[str(i+1)])
 
 
 def load_dict_from_file(file_name):
-    books_dict_sample = {"1": ["once", "twice", "never", "ago"], "2": ["Good morning"], "3": ["a", "b", "c", "d"]}
-    return books_dict_sample
-
-
-###################
-
-# # Creating a text box widget
-my_text_box = Text(root, height=10, width=40)
-my_text_box.pack()
+    text_file = open(file_name, "r")
+    content = text_file.read()
+    text_file.close()
+    books_dict = json.loads(content)
+    return books_dict
 
 open_btn = Button(root, text="Open Text File", command=open_text)
 open_btn.pack()
@@ -57,13 +66,7 @@ open_btn.pack()
 save = Button(root, text="Save File", command=save_text)
 save.pack()
 
-# #label to state what is presented in the app
-# tk_title = Label(text="Books in my bookshelf: ")
-# tk_title.place(bordermode='outside')
-# tk_title.configure(background="brown")
-
 listboxes = [tk.Listbox(frame) for _ in range(3)]
-# listbox = tk.Listbox(frame)
 l_colors = ["lightblue"]
 shelf_label = ["Past read", "Currently reading", "Future read"]
 curlistbox = listboxes[2]
@@ -79,8 +82,8 @@ for i, listbox in enumerate(listboxes):
     listbox.configure(background = l_colors)
     listbox.bind("<FocusIn>", sel_listbox)
 
-books_dict = load_dict_from_file('test.txt')
-load_dict(listboxes, books_dict)
+# open_text()
+
     
 # used to move items (many buttons)
 def move_item(src, dest):
