@@ -24,8 +24,7 @@ def open_text():
         load_dict(listboxes, books_dict)
     
 
-# Function for printing the
-# selected listbox value(s)
+# Function for saving the selected listbox value(s)
 def save_text():
     global filename
     saved_dict = {}
@@ -38,15 +37,6 @@ def save_text():
     text_file = open(filename, "w")
     text_file.write(json_dict)
     text_file.close()
-
- 
-# Create a button widget and
-# map the command parameter to
-# selected_item function
-# btn = Button(root, text='Print Selected', command=save_text)
- 
-# Placing the button and listbox
-# btn.pack(side='bottom')
 
 
 def load_list(listbox, books_list):
@@ -136,7 +126,7 @@ def add_item():
         entry.delete(0, tk.END)  # Clear the entry field
 
 
-
+#select item to delete with delete button
 def del_current():
     for item in curlistbox.curselection():
         curlistbox.delete(item)
