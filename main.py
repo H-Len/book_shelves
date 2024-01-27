@@ -126,7 +126,7 @@ def add_item():
         entry.delete(0, tk.END)  # Clear the entry field
 
 
-#select item to delete with delete button
+#select item to delete and then click delete button
 def del_current():
     for item in curlistbox.curselection():
         curlistbox.delete(item)
