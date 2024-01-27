@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import *
 import json
+import os
 
 root = tk.Tk()
 root.geometry("700x600")
@@ -15,16 +16,17 @@ title.configure(background='lightgrey')
 filename = "book_list.txt"
 
 
-#opens previously saved copy of saved text into each book box 
+#opens previously saved copy of saved text and uses it to replace anything in each book box 
 def open_text():
     global filename
-    books_dict = load_dict_from_file(filename)
-    load_dict(listboxes, books_dict)
+    if os.path.isfile(filename):
+        books_dict = load_dict_from_file(filename)
+        load_dict(listboxes, books_dict)
     
 
 # Function for printing the
 # selected listbox value(s)
-def print_text():
+def save_text():
     global filename
     saved_dict = {}
     for i in range(3):
@@ -41,20 +43,21 @@ def print_text():
 # Create a button widget and
 # map the command parameter to
 # selected_item function
-btn = Button(root, text='Print Selected', command=print_text)
+# btn = Button(root, text='Print Selected', command=save_text)
  
 # Placing the button and listbox
-btn.pack(side='bottom')
+# btn.pack(side='bottom')
 
 
 def load_list(listbox, books_list):
+    listbox.delete(0,tk.END)
     #func will load 1 list of books into 1 listbox
     for book in books_list:
         listbox.insert('end', book)
 
 def load_dict(listboxes, books_dict):
     for i in range(3):
-        load_list(listboxes[i], books_dict[str(i+1)])
+        load_list(listboxes[i], books_dict[str(i)])
 
 
 def load_dict_from_file(file_name):
@@ -63,12 +66,12 @@ def load_dict_from_file(file_name):
     text_file.close()
     books_dict = json.loads(content)
     return books_dict
-
+    
 open_btn = Button(root, text="Open Text File", command=open_text)
 open_btn.pack()
 
 # Create a button to save the text
-save = Button(root, text="Save File", command=print_text)
+save = Button(root, text="Save File", command=save_text)
 save.pack()
 
 listboxes = [tk.Listbox(frame) for _ in range(3)]
@@ -84,8 +87,6 @@ for i, listbox in enumerate(listboxes):
     listbox.pack(side='left')
     listbox.configure(background = l_colors)
     listbox.bind("<FocusIn>", sel_listbox)
-
-# open_text()
 
     
 # used to move items (many buttons)
@@ -115,13 +116,13 @@ def move_right():
 # Move item to the right
 button_right = tk.Button(root, text=f'Move >',
                             command=move_right)
-button_right.pack(side="left")
+button_right.pack(side="top")
 
 
 # Move item to the left
 button_left = tk.Button(root, text=f'Move <',
                         command=move_left)
-button_left.pack(side="left",)
+button_left.pack(side="top",)
 
 
 
