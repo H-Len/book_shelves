@@ -12,34 +12,39 @@ frame.pack()
 title = Label(text="(Box 1) Past reading, (Box 2) Current reading, (Box 3) Future reading")
 title.pack(side=TOP)
 title.configure(background='lightgrey')
+filename = "book_list.txt"
+
 
 #opens previously saved copy of saved text into each book box 
 def open_text():
-    filename = "book_list.txt"
+    global filename
     books_dict = load_dict_from_file(filename)
     load_dict(listboxes, books_dict)
-    # text_file = open(filename, "r")
-    # content = text_file.read()
-    # for i in range(3):
-        # load_list(listboxes[i], books_dict[str(i+1)])
-    # text_file.close()
     
 
 # Function for printing the
 # selected listbox value(s)
-def selected_item():
-    for listbox in listboxes:
-        # Traverse the tuple returned by
-        # curselection method and print
-        # corresponding value(s) in the listbox
-        for i in listbox.curselection():
-            print(listbox.get(i))
+def print_text():
+    global filename
+    saved_dict = {}
+    for i in range(3):
+        curr_books = []
+        for book in listboxes[i].get(0, END):
+            curr_books.append(book)
+        saved_dict[i] = curr_books
+    json_dict = json.dumps(saved_dict)
+    text_file = open(filename, "w")
+    text_file.write(json_dict)
+    text_file.close()
 
-# saves text entered in box
-def save_text():
-   text_file = open("test.txt", "w")
-#    text_file.write(listboxes.get(1.0, END))
-   text_file.close()
+ 
+# Create a button widget and
+# map the command parameter to
+# selected_item function
+btn = Button(root, text='Print Selected', command=print_text)
+ 
+# Placing the button and listbox
+btn.pack(side='bottom')
 
 
 def load_list(listbox, books_list):
@@ -63,12 +68,11 @@ open_btn = Button(root, text="Open Text File", command=open_text)
 open_btn.pack()
 
 # Create a button to save the text
-save = Button(root, text="Save File", command=save_text)
+save = Button(root, text="Save File", command=print_text)
 save.pack()
 
 listboxes = [tk.Listbox(frame) for _ in range(3)]
 l_colors = ["lightblue"]
-shelf_label = ["Past read", "Currently reading", "Future read"]
 curlistbox = listboxes[2]
 
 
@@ -77,7 +81,6 @@ def sel_listbox(event):
     curlistbox = event.widget
 
 for i, listbox in enumerate(listboxes):
-    listbox.insert('end', f'{shelf_label[i]}')
     listbox.pack(side='left')
     listbox.configure(background = l_colors)
     listbox.bind("<FocusIn>", sel_listbox)
